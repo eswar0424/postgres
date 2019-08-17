@@ -3,20 +3,9 @@ pid <> pg_backend_pid() aND datname = 'database_name';
 
 
 ./10/bin/pg_dump -v -d "eOffice_Demo" --column-inserts --data-only -t 'fl_note_template' -f 'temp.sql'
-
-
-
-
 COPY zip_codes FROM '/path/to/csv/ZIP_CODES.txt' DELIMITER ',' CSV header;
-
-
-
-
-
 SELECT row_number() OVER (ORDER BY post_id), post_name_en, post_code, is_active FROM emd.emd_post
-
-
- “rsync -avz username@masterserver:/var/lib/pgsql/9.5 /var/lib/pgsql/. 	--exclude=data”
+ rsync -avz username@masterserver:/var/lib/pgsql/9.5 /var/lib/pgsql/. 	--exclude=data
  
 rsync -avz -e "ssh -p $portNumber" username@masterserver:/var/lib/pgsql/9.5 /var/lib/pgsql/. 	--exclude=data”
 
