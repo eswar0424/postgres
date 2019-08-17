@@ -1,0 +1,134 @@
+﻿
+drop function eswar() returns trigger as $body$
+begin 
+
+insert INTO  ff(id ,sno )values (old.id,old.sno);
+
+
+return old;
+
+end $body$
+
+ LANGUAGE plpgsql VOLATILE;
+
+ drop trigger eswar_tri on dd
+ after delete on dd for each row execute procedure eswar();
+
+ 
+
+
+ create table dd(id int,sno int)
+
+ insert into dd VALUES (1056,2)
+
+delete  from dd where id = 8 
+
+select * from ff
+
+
+CREATE OR REPLACE FUNCTION emd.tr_emddata_insert()
+  RETURNS trigger AS
+$BODY$
+DECLARE 
+		  
+BEGIN
+
+IF tg_op = 'UPDATE' THEN
+PERFORM   fn_insert_empdata();
+RETURN NEW;
+END IF;
+        
+
+IF tg_op = 'INSERT' THEN
+PERFORM   fn_insert_empdata();
+RETURN NEW;
+END IF;
+        
+END 
+
+$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER FUNCTION emd.tr_emddata_insert()
+  OWNER TO eoffice;
+
+
+
+CREATE OR REPLACE FUNCTION public.fn_insert_empdata()
+  RETURNS text AS
+$BODY$
+declare
+
+BEGIN
+   delete from vw_employee_details_with_department;
+   insert into vw_employee_details_with_department 
+   SELECT * from vw_employee_details_with_department_main except
+   SELECT * from vw_employee_details_with_department;
+   RETURN 'Record Inserted Successfully';
+
+END
+$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER FUNCTION public.fn_insert_empdata()
+  OWNER TO eoffice;
+
+
+select * from ff
+
+
+
+
+select * from eswar_insert()
+
+create or replace function eswar_insert() returns text as 
+$$
+begin 
+
+delete from ff;
+insert into ff
+select * from gg except
+select * from ff;
+return 'record inserted successfullt';
+
+end
+$$
+LANGUAGE plpgsql VOLATILE;
+
+
+
+create or replace function nany() returns trigger as 
+$$
+declare
+begin
+
+if TG_OP = 'insert' then
+perform eswar_insert();
+return old;
+end if;
+end
+$$
+LANGUAGE plpgsql VOLATILE;
+
+
+
+
+
+
+
+
+
+CREATE TRIGGER eswar_trii
+  AFTER insert 
+  ON dd
+  FOR EACH STATEMENT
+  EXECUTE PROCEDURE nany()
+
+
+
+
+
+
+select * from dd
+
+select *from dd
