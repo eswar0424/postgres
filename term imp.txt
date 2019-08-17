@@ -1,0 +1,314 @@
+﻿SELECT pg_terminate_backend(pid) FROM  pg_stat_activity WHERE 
+pid <> pg_backend_pid() aND datname = 'database_name';
+
+
+./10/bin/pg_dump -v -d "eOffice_Demo" --column-inserts --data-only -t 'fl_note_template' -f 'temp.sql'
+
+
+
+
+COPY zip_codes FROM '/path/to/csv/ZIP_CODES.txt' DELIMITER ',' CSV header;
+
+
+
+
+
+SELECT row_number() OVER (ORDER BY post_id), post_name_en, post_code, is_active FROM emd.emd_post
+
+
+ “rsync -avz username@masterserver:/var/lib/pgsql/9.5 /var/lib/pgsql/. 	--exclude=data”
+ 
+rsync -avz -e "ssh -p $portNumber" username@masterserver:/var/lib/pgsql/9.5 /var/lib/pgsql/. 	--exclude=data”
+
+CREATE a new databse with old databse
+
+./bin/createdb -O postgres -T eOffice_Admin_13062017 eswar
+ 
+ 
+select instance_name,a.* from eoffice_ws_stats1  a left join eoffice_ws_statsmaster b on a.eoffice_ws_statsmaster_id = b.eoffice_ws_statsmaster_id  
+where stats_as_on_date = '2017-02-28'
+ and is_darpg_site = true
+
+$clust/bin/pg_basebackup -h $host  -D $clust/data -U eoffice -v -P
+
+we can get number of user in instance in eOfficeAdmin databse in view vw_eoffice_ws_statsdarpg
+
+./bin/initdb -D ./9.6/data
+
+ sudo mkdir /var/pgsql_socket/
+$ sudo ln -s /private/tmp/.s.PGSQL.5432 /var/pgsql_socket/
+
+
+select * from pg_class where oid = 2329784;Dead locks..
+
+
+select locktype, relation, relname,transactionid, mode, granted from pg_locks p left join pg_class c on p.relation = c.oid where locktype = 'relation'
+
+
+select count(*) as totalfilecreatedelectronic from fl_file where file_nature = 'P'  and file_state_fk NOT IN (11,12) and  opening_date::date>='2017-04-01' and opening_date::date<='2017-04-30';
+
+
+
+######################################
+
+copy to csv.
+
+copy (select * from loginhistory ) to '/var/lib/pgsql/filename.csv' delimiter ',' CSV header;
+
+
+
+
+
+CREATE TABLE hypo AS SELECT id, 'line ' || id AS val FROM generate_series(1,10000) id;
+select nsp.nspname as object_schema,
+       cls.relname as object_name, 
+       rol.rolname as owner, 
+       case cls.relkind
+         when 'r' then 'TABLE'
+         when 'i' then 'INDEX'
+         when 'S' then 'SEQUENCE'
+         when 'v' then 'VIEW'
+         when 'c' then 'TYPE'
+         else cls.relkind::text
+       end as object_type
+from pg_class cls
+  join pg_roles rol on rol.oid = cls.relowner
+  join pg_namespace nsp on nsp.oid = cls.relnamespace
+where nsp.nspname not in ('information_schema', 'pg_catalog')
+  and nsp.nspname not like 'pg_toast%'
+  and rol.rolname = 'sparrow'
+order by nsp.nspname, cls.relname;
+
+select * from fl_correspondence_receipt  where receipt_creation_date > '2017-07-01'
+
+
+select count(*) as totalreceiptcreatedelectronic  from fl_file_movement  where file_nature = 'E'   and opening_date::date>='2017-07-01' and opening_date::date<='2017-07-31' ;
+
+
+
+select count(*) as totalfilemovedphysical from fl_file fl inner join fl_file_movement movement on movement.file_number_fk = fl.file_id inner join vw_employee_details_with_department vw on vw.post_detail_id = movement.sent_by_post_fk where  fl.file_nature = 'E' and movement.sent_date::date>='2017-07-01' and movement.sent_date::date<='2017-07-31' ;
+
+select count(*)  from fl_file where file_nature = 'E' and file_state_fk not in (11,12)
+
+select * from fl_file where  file_state_fk in (11,12)  and file_nature ='E'
+
+
+
+select file.file_id,coalesce(blanknoting,0) as blanknote,coalesce(havenoting,0) as havenoting from 
+
+(select * from fl_file where file_nature ='E' and  file_id  in (select distinct file_number_fk from fl_note) order by file_state_fk desc) file 
+
+ left join 
+(select file_number_fk,count(*) as blanknoting  from fl_note where original_content = '<p>&nbsp;</p>'  group by file_number_fk  order by 2)blank on blank.file_number_fk = file.file_id
+
+ left join 
+(select file_number_fk,count(*) havenoting from fl_note where original_content <> '<p>&nbsp;</p>' and original_content not ilike '%pdf'  group by file_number_fk  order by 2)noteing on 
+noteing.file_number_fk = file.file_id order by 2,3
+######################rule#########################
+
+ CREATE or replace view emd.eswar as select emd_employee.employee_id as id,emd_employee.employee_code as code,emd_employee.fullname_en as name from emd.emd_employee;
+
+  create or replace rule eswar_rule as on update to emd.eswar DO INSTEAD UPDATE emd.emd_employee set  employee_id=new.id,employee_code = new.code,fullname_en=new.name where emd_employee.employee_id = old.id;
+
+  create or replace rule eswar_rule as on insert to emd.eswar DO INSTEAD insert into emd.emd_employee(employee_id,employee_code,fullname_en) values (new.id,new.code,new.name)
+
+grep -H -R vivek /etc/* | cut -d: -f1
+
+
+
+/var/lib/pgsql/9.6/bin/pg_dump  -U postgres -v -Fc 
+-d "EAPARLIVE" -n 'eapar' -n 'pims' -n 'reference'  -T 'eapar.eapar_audit_detail' -T 'eapar.eapar_logging_information' 
+-T 'eapar.apar_eform_detail_history' -f '/var/lib/pgsql/EAPARLIVE_27112017.backup' 
+
+
+select case when count(role_id_fk)=2 then true
+else false
+end
+ from 
+(
+select distinct role_id_fk from 
+(SELECT vw.login_id, apr.role_id_fk FROM vw_employee_details_with_department vw
+left join admin.adm_post_role apr on apr.post_detail_id=vw.post_detail_id
+WHERE vw.is_postdetail_active=true AND vw.is_user_active=true and apr.is_active=true AND vw.login_id='eoffice-jnu')x 
+where role_id_fk=58
+union
+select distinct role_id_fk from 
+(SELECT vw.login_id, apr.role_id_fk FROM vw_employee_details_with_department vw
+left join admin.adm_post_role apr on apr.post_detail_id=vw.post_detail_id
+WHERE vw.is_postdetail_active=true AND vw.is_user_active=true and apr.is_active=true AND vw.login_id='eoffice-jnu')x 
+where role_id_fk=59  
+) y
+;
+
+
+
+
+
+
+
+ Total User count logged in eFile Application at 15 mintue inteval
+SELECT to_timestamp(floor((extract('epoch' from login_datetime) / 900 )) * 900)  AT TIME ZONE 'UTC' as interval_alias, count(*) user_logins FROM emd_user_tracker where login_datetime::date='2017-03-29' group by interval_alias order by 1;
+
+-- Total Distinct User count logged in eFile Application at 15 mintue inteval
+SELECT to_timestamp(floor((extract('epoch' from login_datetime) / 900 )) * 900)  AT TIME ZONE 'UTC' as interval_alias, count(distinct login_name) user_logins FROM emd_user_tracker where login_datetime::date='2017-03-29' group by interval_alias order by 1;
+
+
+
+
+update eleave.eleave_balance lb set eleave_balance=bal_on_date from 
+(select eleave_balance_id,b.emp_id,leave_type_fk,eleave_balance,bal_on_date,
+v.updated_date,b.updated_date from eleave.eleave_balance  b 
+join templeave v on v.eleave_type_fk_id=b.leave_type_fk and b.emp_id=v.emp_id  and year_id_fk= 2 order by 2,3 )x where lb.eleave_balance_id=x.eleave_balance_id 
+
+
+
+
+
+
+select distinct eed.employee_id, 
+case 
+   when tru_qry.employee_designation_id>0 then tru_qry.employee_designation_id
+   else max_qry.employee_designation_id
+end
+from emd.emd_employee_designation eed
+
+left join ( select max(eed1.employee_designation_id) as employee_designation_id, employee_id from emd.emd_employee_designation eed1 where is_active=true group by employee_id) tru_qry on tru_qry.employee_id=eed.employee_id
+left join ( select max(eed1.employee_designation_id) as employee_designation_id, employee_id  from emd.emd_employee_designation eed1 group by employee_id) max_qry on max_qry.employee_id=eed.employee_id
+where eed.employee_id in (51, 42)
+
+select 
+CASE when sex='male' then 'Mr.'
+ELSE 'Mrs.'
+END || ' '  ||  employee_name_en
+as employee_name 
+from vw_employee_details_with_department limit 1
+
+http://10.248.105.200/eoffice-repo/eOffice/SysAdmin/eswar/
+
+
+SELECT 'GRANT SELECT ON ' || relname || ' TO xxx;'
+FROM pg_class JOIN pg_namespace ON pg_namespace.oid = pg_class.relnamespace
+WHERE nspname = 'admin' AND relkind IN ('r', 'v', 'S');
+
+select * from fl_note where 
+(note_date >='2019-01-03 00:00:00' and note_date <='2019-01-03 09:21:00')
+or (note_date >='2019-01-03 16:14:43') 
+order by note_date
+
+
+select * from fl_print_audit_trail order by print_datetime desc limit 100
+
+update fl_print_audit_trail set print_datetime=(print_datetime + interval '10h' + interval '30m')  where 
+(print_datetime >='2019-01-03 00:00:00' and print_datetime <='2019-01-03 09:21:00')
+or (print_datetime >='2019-01-03 16:14:43')  
+
+
+
+select * from loginhistory  where userid = 'prakash.om.dord' and login_time::date='2019-01-03' order by 1
+
+ select 'delete from ' || tablename||';'  from pg_catalog.pg_tables where schemaname='public' and tablename ilike '%fl%' and tablename not in ( 'fl_configuration','fl_department','fl_dispatch_action','fl_search_restricted_section','fl_template','fl_correspondence_action','fl_draft_state','fl_preferred_list','fl_file_action','fl_preferences','fl_file_code','fl_report_group','fl_reports','fl_report_role_mapping','fl_search_privileges','fl_search_scope_hierarchy','fl_user_certificates');
+
+------------------------------------------------------------------------------------------------------------------
+
+QUERY 2:
+
+------------------------------------------------Sequence Script----------------------------------------------
+
+select 'select setval('||split_part(split_part(column_default,'(',2),'::',1) || ',' || '(select COALESCE(max('|| column_name||'),0)+1 from  public.' || table_name || '), false);' from information_schema.columns  where table_schema='public' and table_name ilike 'fl%' and is_nullable !='YES' and split_part(split_part(column_default,'(',2),'::',1)!='' order by 1;
+
+
+select * from fl_receipt_closed_history where 
+(closed_date >='2019-01-03 00:00:00' and closed_date <='2019-01-03 09:21:00')
+or (closed_date >='2019-01-03 16:14:43') 
+order by closed_date
+
+
+select * from fl_receipt_pdf order by uploaded_on desc limit 100
+
+update fl_receipt_closed_history set closed_date=(closed_date + interval '10h' + interval '30m')  where 
+(closed_date >='2019-01-03 00:00:00' and closed_date <='2019-01-03 09:21:00')
+or (closed_date >='2019-01-03 16:14:43') 
+
+Shared memory in chroot environment for postgresql: permission denied?
+mount -t tmpfs tmp /dev/shm
+
+select userid,ipadd,count(ipadd) from loginhistory where login_time::date='2019-03-26' group by ipadd,userid having count(ipadd)>10
+
+select * from loginhistory limit 10
+
+select * from emd_user_tracker where login_name='sujitha102709-ker' and login_datetime::date='2019-03-26'  limit 10 ;
+select * from loginhistory where userid='sujitha102709-ker' and login_time::date='2019-03-26' order by 1
+
+-- Total User count logged in eFile Application at 15 mintue inteval
+SELECT to_timestamp(floor((extract('epoch' from login_datetime) / 900 )) * 900)  AT TIME ZONE 'UTC' as interval_alias, count(*) user_logins FROM emd_user_tracker where login_datetime::date='2019-03-26' group by interval_alias order by 1;
+
+-- Total Distinct User count logged in eFile Application at 15 mintue inteval
+SELECT to_timestamp(floor((extract('epoch' from login_datetime) / 900 )) * 900)  AT TIME ZONE 'UTC' as interval_alias, count(distinct login_name) user_logins FROM emd_user_tracker where login_datetime::date='2019-03-26' group by interval_alias order by 1;
+
+
+
+
+SELECT to_timestamp(floor((extract('epoch' from login_time::date) / 900 )) * 900)  AT TIME ZONE 'UTC' as interval_alias, count(*) userid FROM loginhistory where login_time::date='2019-03-26' group by interval_alias order by 1; 
+
+SELECT now() - query_start as "runtime", usename, datname,  state, query
+  FROM  pg_stat_activity
+  WHERE now() - query_start > '2 minutes'::interval and state='active'
+ ORDER BY runtime DESC;
+ 
+ 
+   SELECT blocked_locks.pid     AS blocked_pid,
+         blocked_activity.usename  AS blocked_user,
+         blocking_locks.pid     AS blocking_pid,
+         blocking_activity.usename AS blocking_user,
+         blocked_activity.query    AS blocked_statement,
+         blocking_activity.query   AS current_statement_in_blocking_process
+   FROM  pg_catalog.pg_locks         blocked_locks
+    JOIN pg_catalog.pg_stat_activity blocked_activity  ON blocked_activity.pid = blocked_locks.pid
+    JOIN pg_catalog.pg_locks         blocking_locks 
+        ON blocking_locks.locktype = blocked_locks.locktype
+        AND blocking_locks.DATABASE IS NOT DISTINCT FROM blocked_locks.DATABASE
+        AND blocking_locks.relation IS NOT DISTINCT FROM blocked_locks.relation
+        AND blocking_locks.page IS NOT DISTINCT FROM blocked_locks.page
+        AND blocking_locks.tuple IS NOT DISTINCT FROM blocked_locks.tuple
+        AND blocking_locks.virtualxid IS NOT DISTINCT FROM blocked_locks.virtualxid
+        AND blocking_locks.transactionid IS NOT DISTINCT FROM blocked_locks.transactionid
+        AND blocking_locks.classid IS NOT DISTINCT FROM blocked_locks.classid
+        AND blocking_locks.objid IS NOT DISTINCT FROM blocked_locks.objid
+        AND blocking_locks.objsubid IS NOT DISTINCT FROM blocked_locks.objsubid
+        AND blocking_locks.pid != blocked_locks.pid
+ 
+    JOIN pg_catalog.pg_stat_activity blocking_activity ON blocking_activity.pid = blocking_locks.pid
+   WHERE NOT blocked_locks.GRANTED;
+   
+   --select count(*) from vm_backup_app_mapping where stats_as_on_date::date='2019-05-02' 
+
+
+--SELECT NOW() - INTERVAL '1 DAY';
+
+select x.appdescription, (y.total_dir_size_used_in_kb-x.total_dir_size_used_in_kb),(((y.total_dir_size_used_in_kb-x.total_dir_size_used_in_kb)::numeric/x.total_dir_size_used_in_kb::numeric)::numeric)*100, x.total_dir_size_used_in_kb  from
+(select appdescription, total_dir_size_used_in_kb  from app_doc_server_usage_id where stats_as_on_date::date='2019-05-01')x
+left join (select appdescription, total_dir_size_used_in_kb  from app_doc_server_usage_id where stats_as_on_date::date='2019-05-02')y on y.appdescription=x.appdescription order by 3 desc
+
+--select docip , total_dir_size_used_in_kb
+
+:%s/\/var\/lib\/pgsql\/10/$CLUST_PATH/gc
+
+SELECT
+  COUNT(NULLIF(logincount,0)) AS "Max Login Count",
+  username,
+FROM Test
+GROUP BY username
+ORDER BY "Max Login Count";
+
+SELECT 'TRUNCATE TABLE ' ||  tablename || ' ' ||  'cascade' || ';' FROM pg_tables where tablename not ilike '%pg_%' and schemaname not like 'information_schema'
+update emd.emd_user set login_id =  concat(login_id,'.',emd_user_id)
+
+
+RECEIPTS CLOSED
+
+select count(*)  from fl_correspondence_receipt cr
+join fl_correspondence_receipt_max_movement maxmov on cr.correspondence_id = maxmov.correspondence_id
+join fl_correspondence_receipt_movement movement on movement.corres_receipt_movement_id = maxmov.max_movement_id and movement.cc_no = maxmov.cc_no
+where movement.is_closed is true and movement.closing_date is not null and cr.receipt_nature='P'
+
+openssl passwd -salt 'some_plain_salt' -1 'some_plain_pass
